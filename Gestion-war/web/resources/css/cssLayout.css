@@ -1,0 +1,120 @@
+html{
+    background-image:url(https://i.pinimg.com/736x/29/9f/29/299f2974a12149f7fbe3425a002ab33d--background-paper-free-wood-background.jpg);
+}
+h1{
+    color: brown;
+    border:none;
+    
+}   
+body{
+    background-color: transparent;
+    padding:10%;
+}
+#top {
+    position: relative;
+    padding: 5px;
+    margin: 0px 0px 10px 0px;
+}
+
+#logo{
+    width: 150px;
+    margin-top: 10px;
+    
+}
+.ui-accordion .ui-accordion-header{
+        border-radius: 20px;
+        background-image:url(http://www.psdgraphics.com/file/brown-grunge-background.jpg);
+        color: white;
+}
+.ui-accordion .ui-accordion-content {
+      border-radius: 20px;
+      background-image:url(http://www.psdgraphics.com/file/brown-grunge-background.jpg);
+      color: white;
+}
+.ui-datatable thead th, .ui-datatable tfoot td {
+     background-image:url(http://www.psdgraphics.com/file/brown-grunge-background.jpg);
+     color: white;
+     border-radius: 10px;
+}
+
+#bottom {
+    position: relative;
+    padding: 5px;
+    margin: 10px 0px 0px 0px;
+}
+.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default {
+    background-image:url(http://www.psdgraphics.com/file/brown-grunge-background.jpg);
+     color: white;
+     border-radius: 10px;
+}
+.ui-fieldset, .ui-fieldset .ui-fieldset-legend {
+    padding: 0.6em 1em;
+    background-color: transparent;
+    border: none;
+}
+    
+#left {
+    float: left;
+    margin-right: 5px;
+    width:150px;
+}
+input{
+    width: 80px;
+    margin-bottom: 10px;
+}
+#right {
+    float: right;
+    background-color: #ece3a5;
+    padding: 5px;
+    width:100px;
+}
+
+.center_content {
+    position: relative;
+    padding: 5px;
+}
+
+.left_content {
+  
+    padding: 5px;
+    margin-left: 170px;
+}
+
+.right_content {
+ 
+    padding: 5px;
+    margin: 0px 170px 0px 170px;
+}
+
+#top a:link, #top a:visited {
+  color: white;
+  font-weight : bold;
+  text-decoration: none;
+}
+
+#top a:link:hover, #top a:visited:hover  {
+  color: black;
+  font-weight : bold;
+  text-decoration : underline;
+}
+
+.red{
+    background: crimson;
+}
+
+.green{
+    background: greenyellow;
+}
+
+.ui-icon{
+    text-indent: 0;
+}
+.ui-button .ui-button-text {
+    border-radius: 5px;
+    background-color: white;
+}
+.ui-button .ui-button-text:hover {
+    background-color: black;
+    color:white;
+}
+

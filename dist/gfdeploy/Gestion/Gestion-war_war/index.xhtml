@@ -1,0 +1,344 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      >
+    <f:event type="preRenderView" listener="#{personneMbean.raffraichiCache()}"></f:event>
+
+
+    <h:head>
+        <title>ELEUCH AMINE ET MIMOUNA AMIRA</title>
+        <script type="text/javascript">
+
+
+
+
+        </script>
+    </h:head>
+    <h:body>
+
+        <ui:composition template="./resources/defaultTemplate.xhtml">
+            <ui:define name="top">
+                <script type="text/javascript">
+                    function handleDrop(event, ui) {
+
+                        var droppedCar = ui.draggable;
+                        droppedCar.fadeOut('fast');
+                    }
+                    
+                </script>
+
+
+            </ui:define>
+            <ui:define name="left">
+                <p:accordionPanel>
+                    <p:tab title="Créer une personne">
+                        <h:form>
+                            <p:growl id="creerPersonne" showDetail="true" sticky="true"/>
+
+                            Nom: <h:inputText value="#{personneMbean.nom}" id="CreerPersonneNom"  title="Pensez à mettre des majuscules aux noms" ></h:inputText>       
+                            <p:tooltip id="toolTipFocus" for="CreerPersonneNom" showEvent="focus" hideEvent="blur" />
+                            Prénom : <h:inputText id="CreerPersonnePrenom" title="N'abusez pas des jeux de mots" value="#{personneMbean.prenom}"></h:inputText>
+                            <p:tooltip id="toolTipFocu" for="CreerPersonnePrenom" showEvent="focus" hideEvent="blur" />
+                            <p:commandButton style="color: #000000" actionListener="#{personneMbean.creerPersonne()}" update="creerPersonne @({id$=tablePersonne})" value="créer">
+                            </p:commandButton>                      
+                        </h:form>
+                    </p:tab>
+                    <p:tab title="Modifier une personne">
+                        <h:form>
+                            <p:growl id="modif" showDetail="true" sticky="true"/>
+                            Id: <h:inputText value="#{personneMbean.id}" id="modifID"  title="Quel est l'ID?"></h:inputText>
+                            <p:tooltip id="toolTipFous" for="modifID" showEvent="focus" hideEvent="blur" />
+                            Nom: <h:inputText value="#{personneMbean.nom}" id="modiNom"  title="Quel est le nom?"></h:inputText>
+                            <p:tooltip id="toolTipocus" for="modiNom" showEvent="focus" hideEvent="blur" />
+                            Prénom : <h:inputText value="#{personneMbean.prenom}" id="modiPrenom"  title="Quel est le prénom?"></h:inputText>
+                            <p:tooltip id="toolTpFocus" for="modiPrenom" showEvent="focus" hideEvent="blur" />
+                            <p:commandButton style="color: #000000" actionListener="#{personneMbean.updatePersonne()}" update="modif @({id$=tablePersonne})" value="Modifier">
+                            </p:commandButton>                      
+                        </h:form>
+                    </p:tab>
+                    <p:tab title="Ajouter une tache">
+
+                        <h:form>
+
+                            ID Personne : <h:inputText value ="#{tacheMbean.idPersonne}" id="AjouterTachePersonne"  title="Allez au boulot!"/>
+                            <p:tooltip id="toolTiocus" for="AjouterTachePersonne" showEvent="focus" hideEvent="blur" />
+                            Intitulé de la tâche : <h:inputText value ="#{tacheMbean.nomTache}" id="AjouterTache"  title="qu'est ce qu'il faut faire? "/>  
+                            <p:tooltip id="tooipFocus" for="AjouterTache" showEvent="focus" hideEvent="blur" />
+                            <p:commandButton style="color: #000000" actionListener="#{tacheMbean.creerTache()}" value="Créer" update="@([id$taches])" />
+                        </h:form>
+                    </p:tab>
+                    <p:tab title="Modifier une tâche">
+                        <h:form id="modifTache">
+
+                            Tâche : <p:selectOneMenu value="#{tacheMbean.idTache}">
+                                <f:selectItems value="#{tacheMbean.tacheList}" var="t"   itemValue="#{t.id}" itemLabel="#{t.nomTache}"/>
+                            </p:selectOneMenu>  
+                            Personne <p:selectOneMenu value="#{tacheMbean.idPersonne}">
+                                <f:selectItems value="#{personneMbean.personne}" var="p"   itemValue="#{p.id}" itemLabel="#{p.prenom} #{p.nom}"/>
+                            </p:selectOneMenu>  
+                            Intitulé de la tâche : <h:inputText value ="#{tacheMbean.nomTache}"/>       
+                            Status tâche :    <p:selectOneMenu value="#{tacheMbean.status}">
+                                <f:selectItem itemLabel="non attribué"   itemValue="non attribué"/>
+
+                                <f:selectItem itemLabel="en cours"  itemValue="en cours"/>
+
+                                <f:selectItem itemLabel="complète" itemValue="complète"/>
+
+                            </p:selectOneMenu>  
+                            <p:commandButton  style="color: #000000" actionListener="#{tacheMbean.modifierTache()}" value="Modifier" update="@([id$taches])" />
+                        </h:form>
+                    </p:tab>
+                </p:accordionPanel>
+                
+            </ui:define>
+
+
+
+
+
+
+
+
+
+            <ui:define name="content">
+                <h:form id="formPersonne">
+                    <h1><h:outputText value="Liste des utilisateurs"/></h1>
+                    <p:dataTable id="tablePersonne" value="#{personneMbean.personneList}" var="item" >
+
+                        <p:column sortBy="#{item.prenom}" filterBy="#{item.prenom}">
+                            <f:facet name="header">
+                                <h:outputText value="Prenom"/>
+                            </f:facet>
+                            <h:outputText value="#{item.prenom}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Nom"/>
+                            </f:facet>
+                            <h:outputText value="#{item.nom}"/>
+                        </p:column>
+                        <p:column>
+                            <f:facet name="header">
+                                <h:outputText value="Id"/>
+                            </f:facet>
+                            <h:outputText value="#{item.id}"/>
+                        </p:column>
+                        <p:column>
+                            <p:commandButton icon="ui-icon-trash" actionListener="#{personneMbean.supprimerPersonne(item)}" update=" :formPersonne :formTacheEnCours:tableTacheEnCours :formTacheComplete:dropArea :formTacheNonAttribue:tableTache">
+                                <p:confirm header="Confirmation" message="Are you sure?" icon="ui-icon-alert" />
+                            </p:commandButton>
+
+                            <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                                <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                            </p:confirmDialog>    
+                        </p:column>
+
+                    </p:dataTable>
+                </h:form>
+              
+
+
+
+                <h1>Liste des tâches non attribuée</h1>
+
+
+                <h:form id="formTacheNonAttribue">
+                    <p:fieldset id="fieldTacheNonAttribue">
+
+                        <p:dataTable value="#{tacheMbean.modeleNonAttribue}" var="item"
+                                     id="tableTache" 
+                                     rows="10"
+                                     paginator="true"
+                                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                     rowsPerPageTemplate="5,10,15" 
+                                     lazy="true"
+                                     draggableColumns="true"
+                                     draggableRows="true"
+                                     >
+
+
+                            <p:column headerText="Status" >           
+                                <h:outputText value="#{item.status.name}" rendered="#{item.status.name eq 'non attribué'}"/>
+                            </p:column>
+                            
+                            <p:column headerText="Contributeur">                    
+                                <h:outputText value="#{item.contributeur.nom}" rendered="#{item.status.name eq 'non attribué'}" />
+                            </p:column>
+                            
+                            <p:column headerText="NomTache">
+                                <h:outputText value="#{item.nomTache}" rendered="#{item.status.name eq 'non attribué'}"/>
+                            </p:column>
+                            
+                            <p:column headerText="Id">
+                                <h:outputText value="#{item.id}" rendered="#{item.status.name eq 'non attribué'}"/>
+                            </p:column>
+
+                            <p:column >
+                                <p:commandButton rendered="#{item.status.name eq 'non attribué'}" icon="ui-icon-trash" actionListener="#{tacheMbean.supprimerTache(item)}" update=":formTacheEnCours:tableTacheEnCours :formTacheComplete:dropArea :formTacheNonAttribue:tableTache">
+                                    <p:confirm header="Confirmation" message="Are you sure?" icon="ui-icon-alert" />
+                                </p:commandButton>
+
+                                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                                    <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                                </p:confirmDialog>    
+                            </p:column>
+
+                        </p:dataTable>
+                    </p:fieldset>
+                </h:form>
+
+
+                <h1>Liste des tâches en cours</h1>
+                <h:form id="formTacheEnCours">
+                    <p:fieldset id="fieldTacheEnCours">
+
+                        <p:dataTable id="tableTacheEnCours"  value="#{tacheMbean.modeleEncours}" var="item"
+                                     rows="10"
+                                     paginator="true"
+                                     paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                     rowsPerPageTemplate="5,10,15" 
+                                     lazy="true"
+                                     draggableColumns="true"
+                                     draggableRows="true"
+                                     rowStyleClass="#{item.status.name eq 'en cours' ? 'red' : 'null' }  "
+                                     >
+
+
+                            <p:column  headerText="status">
+
+
+                                <h:outputText value="#{item.status.name}" rendered="#{item.status.name eq 'en cours'}" />
+
+                            </p:column>
+                            <p:column  headerText="contributeur">
+
+                                <h:outputText value="#{item.contributeur.nom}" rendered="#{item.status.name eq 'en cours'}" />
+                            </p:column>
+                            <p:column  headerText="intitule">
+
+                                <h:outputText value="#{item.nomTache}" rendered="#{item.status.name eq 'en cours'}"/>
+                            </p:column>
+                            <p:column >
+                                <h:commandLink onmousedown="colOne1([{name:'myName1',value:'#{item.id}'}]);">
+                                <h:outputText id="dragIcon1" styleClass="ui-icon ui-icon-arrow-4" rendered="#{item.status.name eq 'en cours'}" />
+                                <p:draggable for="dragIcon1" revert="true" helper="clone" rendered="#{item.status.name eq 'en cours'}"  />
+                                </h:commandLink>
+                                 <p:remoteCommand   name="colOne1" actionListener="#{tacheMbean.setTacheDrag(item)}"/>
+                                
+                            </p:column>
+
+                            <p:column >
+                                <p:commandButton rendered="#{item.status.name eq 'en cours'}" icon="ui-icon-trash" actionListener="#{tacheMbean.supprimerTache(item)}" update=":formTacheEnCours:tableTacheEnCours :formTacheComplete:dropArea :formTacheNonAttribue:tableTache">
+                                    <p:confirm header="Confirmation" message="Are you sure?" icon="ui-icon-alert" />
+                                </p:commandButton>
+
+                                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                                    <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                                </p:confirmDialog>    
+                            </p:column>
+
+                        </p:dataTable>
+                    </p:fieldset>
+
+
+                </h:form>
+
+                <h1>Liste des tâches complète</h1>
+                <h:form id="formTacheComplete">
+                    <p:fieldset id="fieldTacheComplete">
+                        <p:outputPanel id="dropArea">
+
+                            <p:dataTable value="#{tacheMbean.modeleComplete}" var="item"
+                                         id="tableTacheComplete" 
+                                         rows="10"
+                                         paginator="true"
+                                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                         rowsPerPageTemplate="5,10,15" 
+                                         lazy="true"
+                                         draggableColumns="true"
+                                         rowStyleClass="#{item.status.name eq 'complète' ? 'green' : 'null' }  "
+
+                                         >
+
+
+                                <p:column headerText="status">
+                                    <h:outputText value="#{item.status.name}" rendered="#{item.status.name eq 'complète'}" />
+                                </p:column>
+                                
+                                <p:column  headerText="contributeur">
+                                    <h:outputText value="#{item.contributeur.nom}" rendered="#{item.status.name eq 'complète'}"/>
+                                </p:column>
+                                
+                                <p:column headerText="intitule" sortBy="#{item.nomTache}">
+                                    <h:outputText value="#{item.nomTache}" rendered="#{item.status.name eq 'complète'}"/>
+                                </p:column>
+                                
+                                <p:column >
+                                    <h:commandLink onmousedown="colOne([{name:'myName1',value:'#{item.id}'}]);">
+                                    <h:outputText id="dragIconComplete" styleClass="ui-icon ui-icon-arrow-4" rendered="#{item.status.name eq 'complète'}" />
+                                    <p:draggable for="dragIconComplete" revert="true" helper="clone" rendered="#{item.status.name eq 'complète'}"  />
+                                    </h:commandLink>  
+                                    <p:remoteCommand   name="colOne" actionListener="#{tacheMbean.setTacheDrag(item)}"/>
+                                
+                                </p:column>
+                                
+                                <p:column>
+                                    <p:commandButton rendered="#{item.status.name eq 'complète'}" icon="ui-icon-trash" actionListener="#{tacheMbean.supprimerTache(item)}" update=":formTacheEnCours:tableTacheEnCours :formTacheComplete:dropArea :formTacheNonAttribue:tableTache">
+                                        <p:confirm header="Confirmation" message="Are you sure?" icon="ui-icon-alert" />
+                                    </p:commandButton>
+
+                                    <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                                    </p:confirmDialog>    
+                                </p:column>
+
+                            </p:dataTable>
+
+                        </p:outputPanel>
+
+                    </p:fieldset>
+
+                </h:form>
+
+
+                <p:droppable for=":formTacheComplete:fieldTacheComplete" tolerance="touch" activeStyleClass="ui-state-highlight" datasource=":formTacheEnCours:tableTacheEnCours" onDrop="handleDrop">
+                    <p:ajax listener="#{tacheMbean.onEncoursDrop}" update=":formTacheEnCours:tableTacheEnCours :formTacheComplete:dropArea :formTacheNonAttribue:tableTache"/>
+
+                </p:droppable>
+
+               
+
+                <p:droppable for=":formTacheEnCours:fieldTacheEnCours" tolerance="touch" activeStyleClass="ui-state-highlight" datasource=":formTacheComplete:tableTacheComplete" onDrop="handleDrop">
+                    <p:ajax listener="#{tacheMbean.onEncoursDrop}" update=":formTacheEnCours:tableTacheEnCours :formTacheComplete:dropArea :formTacheNonAttribue:tableTache"/>
+
+                </p:droppable>
+
+
+                 <p:droppable for=":formTacheNonAttribue:fieldTacheNonAttribue" tolerance="touch" activeStyleClass="ui-state-highlight" datasource=":formTacheEnCours:tableTacheEnCours" onDrop="handleDrop">
+                    <p:ajax listener="#{tacheMbean.onEncoursDropNonAttribue}" update=":formTacheEnCours:tableTacheEnCours :formTacheComplete:dropArea :formTacheNonAttribue:tableTache"/>
+
+                </p:droppable>
+                
+                 <p:droppable for=":formTacheNonAttribue:fieldTacheNonAttribue" tolerance="touch" activeStyleClass="ui-state-highlight" datasource=":formTacheComplete:tableTacheComplete" onDrop="handleDrop">
+                    <p:ajax listener="#{tacheMbean.onEncoursDropNonAttribue}" update=":formTacheEnCours:tableTacheEnCours :formTacheComplete:dropArea :formTacheNonAttribue:tableTache"/>
+
+                </p:droppable>
+
+               
+
+            </ui:define>
+
+
+        </ui:composition>
+
+
+    </h:body>
+</html>
